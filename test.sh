@@ -7,6 +7,7 @@
 # https://doxygen.openinfosecfoundation.org/source-nfq_8c_source.html#l00514
 # http://netfilter.org/projects/libnetfilter_queue/doxygen/
 # http://www.netfilter.org/projects/libnetfilter_queue/doxygen/group__LibrarySetup.html
+# https://github.com/chifflier/nfqueue-bindings/blob/master/perl/libnetfilter_queue_perl.i
 
 # question asked here 
 # https://marc.info/?l=netfilter&r=1&b=201712&w=2&
