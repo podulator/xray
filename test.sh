@@ -1,18 +1,5 @@
 #!/bin/bash
 
-# iptables needs to be codified from
-# https://doxygen.openinfosecfoundation.org/source-nfq_8c_source.html#l00514
-# https://bani.com.br/2012/05/programmatically-managing-iptables-rules-in-c-iptc/
-# https://www.netfilter.org/documentation/HOWTO/netfilter-hacking-HOWTO.txt
-# https://doxygen.openinfosecfoundation.org/source-nfq_8c_source.html#l00514
-# http://netfilter.org/projects/libnetfilter_queue/doxygen/
-# http://www.netfilter.org/projects/libnetfilter_queue/doxygen/group__LibrarySetup.html
-# https://github.com/chifflier/nfqueue-bindings/blob/master/perl/libnetfilter_queue_perl.i
-
-# question asked here 
-# https://marc.info/?l=netfilter&r=1&b=201712&w=2&
-
-
 trap ctrl_c INT
 inboundQueue=1
 outboundQueue=2

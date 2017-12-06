@@ -13,18 +13,6 @@
 #include <libnetfilter_queue/libnetfilter_queue.h>
 #include <linux/netfilter/nfnetlink_conntrack.h>
 
-/*
- * 
- * http://www.roman10.net/2011/12/01/how-to-configure-install-and-use-libnefilter_queue-on-linux/
- * 
- * https://code.tutsplus.com/tutorials/http-headers-for-dummies--net-8039
- * https://stackoverflow.com/questions/1085083/regular-expressions-in-c-examples
- * 
- * http://wiki.tldp.org/iptc%20library%20HOWTO
- * http://tldp.org/HOWTO/Querying-libiptc-HOWTO/index.html
- * 
- */
-
 static struct mnl_socket *nl;
 
 static struct nlmsghdr *nfq_hdr_put(char *buf, int type, uint32_t queue_num) {
