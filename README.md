@@ -2,6 +2,9 @@
 
 experiments around trying to get an xray daemon happening in userland based on libnetfilter_queue
 
+## dependencies
+apt-get install libmnl-dev libnetfilter-queue-dev libnfnetlink-dev nfqueue-bindings-perl
+
 iptables rule 
 iptables -t filter -A OUTPUT -p tcp -j NFQUEUE --queue-num $outboundQueue --queue-bypass
 needs to be codified from
