@@ -12,8 +12,12 @@
 #include <linux/netfilter/nfnetlink_queue.h>
 #include <libnetfilter_queue/libnetfilter_queue.h>
 #include <linux/netfilter/nfnetlink_conntrack.h>
+#include <linux/ip.h>
+#include <linux/tcp.h>
+#include <regex.h> 
 
 static struct mnl_socket *nl;
+regex_t regexIn;
 
 static struct nlmsghdr *nfq_hdr_put(char *buf, int type, uint32_t queue_num) {
 	struct nlmsghdr *nlh = mnl_nlmsg_put_header(buf);
@@ -101,10 +105,43 @@ static int queue_cb(const struct nlmsghdr *nlh, void *data)
 	if (skbinfo & NFQA_SKB_CSUMNOTREADY)
 		printf(", checksum not ready");
 	puts(")");
-	
-	printf("sending verdict to queue handle %i\n", nfg->res_id);
+
+	if (attr[NFQA_PAYLOAD]) {
+		
+		unsigned char *pkt = mnl_attr_get_payload(attr[NFQA_PAYLOAD]);
+		struct iphdr *ip_ptr = (struct iphdr *)((u_int8_t *) pkt);
+		u_int8_t ip_len = (ip_ptr->ihl * 4);
+		struct tcphdr *tcp_ptr = (struct tcphdr *)((u_int8_t *) ip_ptr + ip_len);
+
+		/** If we have data, set the pointers */
+		if (tcp_ptr->doff != 0) {
+			uint16_t pkt_size = mnl_attr_get_payload_len(attr[NFQA_PAYLOAD]);
+			unsigned char *payload_ptr = (u_int8_t *) tcp_ptr + (tcp_ptr->doff * sizeof(u_int32_t));
+			uint16_t payload_len = pkt_size - (ip_len + tcp_ptr->doff * 4);
+
+			if (payload_len > 0) {
+				char subbuff[payload_len];
+				memcpy( subbuff, payload_ptr, payload_len - 1 );
+				subbuff[payload_len] = '\0';
+				//printf("trimmed header :: %s\n", subbuff);
+				int regexRet = regexec(&regexIn, subbuff, 0, NULL, 0);
+				if (!regexRet) {
+					printf("got data size :: %i\n", payload_len);
+					printf("HEADER :: \n__________\n%s\n__________\n", subbuff);
+				} else if (regexRet != REG_NOMATCH) {
+					char msgbuf[100];
+					regerror(regexRet, &regexIn, msgbuf, sizeof(msgbuf));
+					fprintf(stderr, "Regex match failed: %s\n", msgbuf);
+				}
+
+			}
+		}
+
+	}
+
+	//printf("sending verdict to queue handle %i\n", nfg->res_id);
 	nfq_send_verdict(ntohs(nfg->res_id), id);
-	puts("verdict sent");
+	//puts("verdict sent");
 	return MNL_CB_OK;
 }
 
@@ -235,9 +272,18 @@ int main(int argc, char *argv[]) {
 		help(argv[0]);
 		exit(EXIT_FAILURE);
 	}
+
+	int regexRet = regcomp(&regexIn, "^(GET|POST|PUT|DELETE|PATCH|PURGE|BAN|HEAD) [^\\s]* HTTP\\/1\\.1\\s", REG_EXTENDED);
+	if (regexRet) {
+		fprintf(stderr, "Could not compile inbound regex\n");
+		exit(1);
+	}
+
 	printf("%s running....\n", argv[0]);
 
 	setupInboundFilter(inboundQueue);
+
+	regfree(&regexIn);
 
 	//inboundListener(inboundQueue);
 	//for (;;) {}
