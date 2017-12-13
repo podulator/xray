@@ -12,7 +12,6 @@ https://doxygen.openinfosecfoundation.org/source-nfq_8c_source.html#l00514
 
 ## bookmarks
   * http://www.roman10.net/2011/12/01/how-to-configure-install-and-use-libnefilter_queue-on-linux/
-  * https://code.tutsplus.com/tutorials/http-headers-for-dummies--net-8039
   * http://wiki.tldp.org/iptc%20library%20HOWTO
   * http://tldp.org/HOWTO/Querying-libiptc-HOWTO/index.html
   * https://bani.com.br/2012/05/programmatically-managing-iptables-rules-in-c-iptc/
@@ -20,6 +19,8 @@ https://doxygen.openinfosecfoundation.org/source-nfq_8c_source.html#l00514
   * https://doxygen.openinfosecfoundation.org/source-nfq_8c_source.html#l00514
   * http://netfilter.org/projects/libnetfilter_queue/doxygen/
   * https://github.com/chifflier/nfqueue-bindings/blob/master/perl/libnetfilter_queue_perl.i
+  * https://home.regit.org/netfilter-en/using-nfqueue-and-libnetfilter_queue/comment-page-1/
+  * https://www.pacificsimplicity.ca/blog/libmnl-and-queuing-example
 
 ## question asked here 
   * https://marc.info/?l=netfilter&r=1&b=201712&w=2&

@@ -78,8 +78,6 @@ static int queue_cb(const struct nlmsghdr *nlh, void *data)
 	
 	ph = mnl_attr_get_payload(attr[NFQA_PACKET_HDR]);
 	plen = mnl_attr_get_payload_len(attr[NFQA_PAYLOAD]);
-	/* void *payload = mnl_attr_get_payload(attr[NFQA_PAYLOAD]); */
-
 	skbinfo = attr[NFQA_SKB_INFO] ? ntohl(mnl_attr_get_u32(attr[NFQA_SKB_INFO])) : 0;
 	
 	if (attr[NFQA_CAP_LEN]) {
@@ -113,7 +111,6 @@ static int queue_cb(const struct nlmsghdr *nlh, void *data)
 		u_int8_t ip_len = (ip_ptr->ihl * 4);
 		struct tcphdr *tcp_ptr = (struct tcphdr *)((u_int8_t *) ip_ptr + ip_len);
 
-		/** If we have data, set the pointers */
 		if (tcp_ptr->doff != 0) {
 			uint16_t pkt_size = mnl_attr_get_payload_len(attr[NFQA_PAYLOAD]);
 			unsigned char *payload_ptr = (u_int8_t *) tcp_ptr + (tcp_ptr->doff * sizeof(u_int32_t));
@@ -123,11 +120,9 @@ static int queue_cb(const struct nlmsghdr *nlh, void *data)
 				char subbuff[payload_len];
 				memcpy( subbuff, payload_ptr, payload_len - 1 );
 				subbuff[payload_len] = '\0';
-				//printf("trimmed header :: %s\n", subbuff);
 				int regexRet = regexec(&regexIn, subbuff, 0, NULL, 0);
 				if (!regexRet) {
-					printf("got data size :: %i\n", payload_len);
-					printf("HEADER :: \n__________\n%s\n__________\n", subbuff);
+					printf("HEADER (%i bytes) :: \n__________\n%s\n__________\n", payload_len, subbuff);
 				} else if (regexRet != REG_NOMATCH) {
 					char msgbuf[100];
 					regerror(regexRet, &regexIn, msgbuf, sizeof(msgbuf));
@@ -273,19 +268,15 @@ int main(int argc, char *argv[]) {
 		exit(EXIT_FAILURE);
 	}
 
-	int regexRet = regcomp(&regexIn, "^(GET|POST|PUT|DELETE|PATCH|PURGE|BAN|HEAD) [^\\s]* HTTP\\/1\\.1\\s", REG_EXTENDED);
+	int regexRet = regcomp(&regexIn, "^(GET|POST|PUT|DELETE|PATCH|PURGE|BAN|HEAD|OPTIONS) [^\\s]* HTTP\\/1\\.1\\s", REG_EXTENDED);
 	if (regexRet) {
 		fprintf(stderr, "Could not compile inbound regex\n");
-		exit(1);
+		exit(EXIT_FAILURE);
 	}
 
 	printf("%s running....\n", argv[0]);
 
 	setupInboundFilter(inboundQueue);
-
 	regfree(&regexIn);
-
-	//inboundListener(inboundQueue);
-	//for (;;) {}
 	return 0;
 }
