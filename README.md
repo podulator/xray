@@ -13,14 +13,12 @@ https://doxygen.openinfosecfoundation.org/source-nfq_8c_source.html#l00514
 ## bookmarks
   * http://www.roman10.net/2011/12/01/how-to-configure-install-and-use-libnefilter_queue-on-linux/
   * https://code.tutsplus.com/tutorials/http-headers-for-dummies--net-8039
-  * https://stackoverflow.com/questions/1085083/regular-expressions-in-c-examples
   * http://wiki.tldp.org/iptc%20library%20HOWTO
   * http://tldp.org/HOWTO/Querying-libiptc-HOWTO/index.html
   * https://bani.com.br/2012/05/programmatically-managing-iptables-rules-in-c-iptc/
   * https://www.netfilter.org/documentation/HOWTO/netfilter-hacking-HOWTO.txt
   * https://doxygen.openinfosecfoundation.org/source-nfq_8c_source.html#l00514
   * http://netfilter.org/projects/libnetfilter_queue/doxygen/
-  * http://www.netfilter.org/projects/libnetfilter_queue/doxygen/group__LibrarySetup.html
   * https://github.com/chifflier/nfqueue-bindings/blob/master/perl/libnetfilter_queue_perl.i
 
 ## question asked here 
